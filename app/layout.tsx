@@ -1,5 +1,4 @@
 import "./globals.css";
-import {Login} from "/login";
 
 export default function RootLayout({
   children,
