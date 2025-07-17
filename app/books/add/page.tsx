@@ -20,21 +20,20 @@ export default function AddBookPage() {
 
     const onFinish = async (values: { title: string; author: string }) => {
 
-        setTimeout(() => {
-            const existingBooks = JSON.parse(localStorage.getItem('books') || '[]');
-            const newBook: Book = {
-                id: Date.now(),
-                title: values.title,
-                author: values.author,
-                createdAt: new Date().toLocaleDateString('th-TH'),
-            };
+        const existingBooks = JSON.parse(localStorage.getItem('books') || '[]');
+        const newBook: Book = {
+            id: Date.now(),
+            title: values.title,
+            author: values.author,
+            createdAt: new Date().toLocaleDateString('th-TH'),
+        };
 
-            const updatedBooks = [...existingBooks, newBook];
-            localStorage.setItem('books', JSON.stringify(updatedBooks));
+        const updatedBooks = [...existingBooks, newBook];
+        localStorage.setItem('books', JSON.stringify(updatedBooks));
 
-            message.success('เพิ่มหนังสือสำเร็จ!');
-            router.push('/books');
-        }, 300);
+        message.success('เพิ่มหนังสือสำเร็จ!');
+        router.push('/books');
+    
     };
 
     return (

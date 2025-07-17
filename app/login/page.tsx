@@ -12,14 +12,12 @@ export default function LoginPage() {
     const router = useRouter();
     const onFinish = async (values: {username: string; password: string}) => {
         setLoading(true);
-        setTimeout(()=>{
-            if(values.username && values.password){
-                sessionStorage.setItem('username', values.username);
-                sessionStorage.setItem('isLoggedIn', 'ture')
-                router.push('/books')
-            }
-            setLoading(false);
-        },300)
+        if(values.username && values.password){
+            sessionStorage.setItem('username', values.username);
+            sessionStorage.setItem('isLoggedIn', 'ture')
+            router.push('/books')
+        }
+        setLoading(false);
     };
 
     return (

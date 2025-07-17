@@ -43,19 +43,17 @@ export default function EditBookPage() {
     const onFinish = async (values: { title: string; author: string }) => {
         setLoading(true);
 
-        setTimeout(() => {
-            const savedBooks = JSON.parse(localStorage.getItem('books') || '[]');
-            const updatedBooks = savedBooks.map((b: Book) =>
-                b.id === bookId
-                    ? { ...b, title: values.title, author: values.author }
-                    : b
-            );
+        const savedBooks = JSON.parse(localStorage.getItem('books') || '[]');
+        const updatedBooks = savedBooks.map((b: Book) =>
+            b.id === bookId
+                ? { ...b, title: values.title, author: values.author }
+                : b
+        );
 
-            localStorage.setItem('books', JSON.stringify(updatedBooks));
-            message.success('แก้ไขหนังสือสำเร็จ!');
-            router.push('/books');
-            setLoading(false);
-        }, 300);
+        localStorage.setItem('books', JSON.stringify(updatedBooks));
+        message.success('แก้ไขหนังสือสำเร็จ!');
+        router.push('/books');
+        setLoading(false);
     };
 
     if (pageLoading) {
