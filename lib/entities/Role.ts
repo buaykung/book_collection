@@ -1,4 +1,5 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, Index, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Users } from "./Users";
 
 @Index("role_pk", ["id"], { unique: true })
 @Entity("role", { schema: "public" })
@@ -14,4 +15,8 @@ export class Role {
 
   @Column("enum", { name: "role", nullable: true, enum: ["admin", "author"] })
   role: "admin" | "author" | null;
+
+  @OneToOne(() => Users, user => user.id)
+  @JoinColumn({ name: "users_id", referencedColumnName: "id" })
+  user?: Users;
 }

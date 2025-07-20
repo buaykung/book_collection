@@ -1,4 +1,5 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, Index, PrimaryGeneratedColumn, OneToOne, JoinColumn } from "typeorm";
+import { Role } from "./Role";
 
 @Index("users_pk", ["id"], { unique: true })
 @Index("pass_unique", ["password"], { unique: true })
@@ -32,4 +33,8 @@ export class Users {
 
   @Column("integer", { name: "updated_by", nullable: true })
   updatedBy: number | null;
+
+  @OneToOne(() => Role, role => role.usersId)
+  @JoinColumn({ name: "id", referencedColumnName: "usersId" })
+  role?: Role;
 }
