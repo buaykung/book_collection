@@ -1,15 +1,19 @@
 import { AppDataSource } from '@/lib/ormconfig';
 import { Users } from '@/lib/entities/Users';
 import { NextResponse } from 'next/server';
+import { initializeDatabase } from '@/lib/database';
 
 export async function GET() {
-    if(!AppDataSource.isInitialized){
-        await AppDataSource.initialize();
+    try {
+        const dataSource = await initializeDatabase();
+        const userRepository = dataSource.getRepository(Users);
+        const user = await userRepository.find();
+        return NextResponse.json(user);
+    } catch (error) {
+        const err = error as Error;
+        console.error("Error fetching user:", err);
+        return NextResponse.json({ message: err.message }, {status: 500});
     }
-
-    const user = await AppDataSource.getRepository(Users).find()
-
-    return NextResponse.json(user);
 }
 
 export async function POST(req: Request) {
