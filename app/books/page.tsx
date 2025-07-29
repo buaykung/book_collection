@@ -19,6 +19,8 @@ import {
   UserOutlined
 } from '@ant-design/icons';
 import { Book } from "../types/book";
+import { RootState } from "../store/store";
+import { useSelector } from "react-redux";
 
 const { Title } = Typography;
 
@@ -26,16 +28,18 @@ export default function Books(){
     const [books, setBooks] = useState<Book[]>([]);
     const [username, setUsername] = useState('');
     const router = useRouter();
+    const user = useSelector((state: RootState) => state.auth);
 
     useEffect(() => {
-        const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+        
+        const isLoggedIn = user?.isAuthenticated;
         const storedUsername = sessionStorage.getItem('username');
 
-        const handleBeforeUnload = () => {
-            sessionStorage.clear();
-        };
+        // const handleBeforeUnload = () => {
+        //     sessionStorage.clear();
+        // };
         
-        window.addEventListener('beforeunload', handleBeforeUnload);
+        // window.addEventListener('beforeunload', handleBeforeUnload);
         
         if (!isLoggedIn) {
             router.push('/login');

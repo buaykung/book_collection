@@ -1,23 +1,27 @@
 
 'use client'
 
-import React from 'react';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Flex, Card} from 'antd';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { loginSuccess } from '../store/authSlice';
 import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
-    const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch();
     const router = useRouter();
+
     const onFinish = async (values: {username: string; password: string}) => {
-        setLoading(true);
-        if(values.username && values.password){
-            sessionStorage.setItem('username', values.username);
-            sessionStorage.setItem('isLoggedIn', 'ture')
-            router.push('/books')
-        }
-        setLoading(false);
+
+        const res = await fetch('/api/login', {
+            method: 'POST',
+            body: JSON.stringify({username: values.username, password: values.password})
+        });
+        const data = await res.json();
+
+        dispatch(loginSuccess(data));
+        router.push('/books')
     };
 
     return (
