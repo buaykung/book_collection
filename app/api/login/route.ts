@@ -2,7 +2,6 @@ import { Users } from '@/lib/entities/Users';
 import { NextResponse } from 'next/server';
 import { initializeDatabase } from '@/lib/database';
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
 
 export async function POST(req : Request) {
     try {
@@ -13,7 +12,6 @@ export async function POST(req : Request) {
         if (!user) {
             return NextResponse.json({ message: 'User not found' }, { status: 401 });
         }
-        // const valid = await bcrypt.compare(password, user.password)
         if (password !== user.password){
             return NextResponse.json({ error: 'Invalid password' }, { status: 401 });
         }

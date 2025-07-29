@@ -28,18 +28,12 @@ export default function Books(){
     const [books, setBooks] = useState<Book[]>([]);
     const [username, setUsername] = useState('');
     const router = useRouter();
-    const user = useSelector((state: RootState) => state.auth);
+    const auth = useSelector((state: RootState) => state.auth);
 
     useEffect(() => {
         
-        const isLoggedIn = user?.isAuthenticated;
+        const isLoggedIn = auth?.isAuthenticated;
         const storedUsername = sessionStorage.getItem('username');
-
-        // const handleBeforeUnload = () => {
-        //     sessionStorage.clear();
-        // };
-        
-        // window.addEventListener('beforeunload', handleBeforeUnload);
         
         if (!isLoggedIn) {
             router.push('/login');
