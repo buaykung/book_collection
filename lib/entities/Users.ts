@@ -36,11 +36,4 @@ export class Users {
 
   @Column("character varying", { name: "name"})
   name: string;
-
-  @OneToMany(() => Book, (book) => book.user)
-  books: Book[];
-  
-  @OneToOne(() => Role, (role) => role.user)
-  role: Role;
-
 }
