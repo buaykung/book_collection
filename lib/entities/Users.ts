@@ -1,9 +1,10 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
-
+import { Column, Entity, Index, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Role } from "./Role";
+import { Book } from "./Book";
+ 
 @Index("users_pk", ["id"], { unique: true })
-@Index("pass_unique", ["password"], { unique: true })
 @Index("users_unique", ["username"], { unique: true })
-@Entity("users", { schema: "public" })
+@Entity("users", { schema: "bookcollection" })
 export class Users {
   @PrimaryGeneratedColumn({ type: "integer", name: "id" })
   id: number;
@@ -35,5 +36,11 @@ export class Users {
 
   @Column("character varying", { name: "name"})
   name: string;
+
+  @OneToMany(() => Book, (book) => book.user)
+  books: Book[];
+  
+  @OneToOne(() => Role, (role) => role.user)
+  role: Role;
 
 }

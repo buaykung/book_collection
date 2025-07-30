@@ -1,13 +1,18 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Users } from "./Users";
 
 @Index("book_pk", ["id"], { unique: true })
-@Entity("book", { schema: "public" })
+@Entity("book", { schema: "bookcollection" })
 export class Book {
   @PrimaryGeneratedColumn({ type: "integer", name: "id" })
   id: number;
 
   @Column("integer", { name: "users_id" })
   usersId: number;
+
+  @ManyToOne(() => Users, (user) => user.books, { onDelete: "CASCADE" })
+  @JoinColumn({ name: "users_id" })
+  user: Users;
 
   @Column("character varying", { name: "book_name", nullable: true })
   bookName: string | null;
