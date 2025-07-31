@@ -11,7 +11,7 @@ export const AppDataSource = new DataSource({
   password: 'buay1234', 
   database: 'postgres',  
   entities: [Users, Role, Book],
-  // migrations: [`${__dirname}/migration/*.{ts,js}`],
-  synchronize: true,
+  migrationsRun: true,
+  synchronize: false,
   logging: true
 });

@@ -1,5 +1,4 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Users } from "./Users";
+import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
 
 @Index("book_pk", ["id"], { unique: true })
 @Entity("book", { schema: "bookcollection" })
@@ -9,10 +8,6 @@ export class Book {
 
   @Column("integer", { name: "users_id" })
   usersId: number;
-
-  @ManyToOne(() => Users, (user) => user.Book, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "users_id" })
-  user: Users;
 
   @Column("character varying", { name: "book_name", nullable: true })
   bookName: string | null;

@@ -1,6 +1,4 @@
-import { Column, Entity, Index, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Role } from "./Role";
-import { Book } from "./Book";
+import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
  
 @Index("users_pk", ["id"], { unique: true })
 @Index("users_unique", ["username"], { unique: true })
@@ -37,9 +35,4 @@ export class Users {
   @Column("character varying", { name: "name"})
   name: string;
 
-  @OneToMany(() => Book, (book) => book.user)
-  Book: Book[];
-
-  @OneToOne(() => Role, (role) => role.user)
-  role: Role | null;
 }

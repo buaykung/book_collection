@@ -2,6 +2,7 @@ import { Users } from '@/lib/entities/Users';
 import { Role } from '@/lib/entities/Role';
 import { NextResponse } from 'next/server';
 import { initializeDatabase } from '@/lib/database';
+import jwt from 'jsonwebtoken';
 
 export async function GET() {
     try {
@@ -19,15 +20,22 @@ export async function GET() {
 export async function POST(req: Request) {
     try {
         const dataSource = await initializeDatabase();
-        const { username } = await req.json();
         const userRepository = dataSource.getRepository(Users);
         const roleRepository = dataSource.getRepository(Role);
-        const existing = await userRepository.findOne({ where: { username } });
+        const body = await req.json();
+
+        if (!body.username || !body.password || !body.name) {
+            return NextResponse.json(
+                { message: 'Username, password, and name are required' }, 
+                { status: 400 }
+            );
+        }
+
+        const existing = await userRepository.findOne({ where: { username: body.username } });
         if (existing) {
             return NextResponse.json({ message: 'User already exists' }, { status: 400 });
         }
-        const body = await req.json();
-
+       
         const newUser = {
             username: body.username,
             password: body.password,
@@ -44,13 +52,28 @@ export async function POST(req: Request) {
             role: "admin" as const
         };
 
-        const savedRole = await roleRepository.save(newRole);
-
-        preSavedUser.role = savedRole;
-
+        await roleRepository.save(newRole);
         const savedUser = await userRepository.save(preSavedUser);
+        const token = jwt.sign(
+            { 
+                userId: savedUser.id, 
+                username: savedUser.username,
+                role: newRole.role 
+            },
+            process.env.JWT_SECRET!,
+            { expiresIn: 60 }
+        );
 
-        return NextResponse.json(savedUser);
+        const { password, ...userWithoutPassword } = savedUser;
+
+        return NextResponse.json(
+            { 
+                message: 'User created successfully',
+                user: userWithoutPassword,
+                token 
+            }, 
+            { status: 201 }
+        );
     } catch (error) {
         const err = error as Error;
         console.error("Error fetching user:", err);

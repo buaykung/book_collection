@@ -1,33 +1,47 @@
-
 'use client'
 
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input, Flex, Card} from 'antd';
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { loginSuccess } from '../store/authSlice';
+import { Button, Checkbox, Form, Input, Flex, Card, message} from 'antd';
+import { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../hook/redux';
+import { clearError, loginUser } from '../store/authSlice';
 import { useRouter } from 'next/navigation';
 
+interface LoginFormData {
+    username: string;
+    password: string;
+}
+
 export default function LoginPage() {
-    const dispatch = useDispatch();
+    const [form] = Form.useForm();
+    const dispatch = useAppDispatch();
     const router = useRouter();
+    const { isLoading, error } = useAppSelector((state) => state.auth);
 
-    const onFinish = async (values: {username: string; password: string}) => {
+    const onFinish = async (values: LoginFormData) => {
 
-        const res = await fetch('/api/login', {
-            method: 'POST',
-            body: JSON.stringify({username: values.username, password: values.password})
-        });
-        const data = await res.json();
-
-        dispatch(loginSuccess(data));
-        router.push('/books')
+        try {
+            const result = await dispatch(loginUser(values));
+            
+            if (loginUser.fulfilled.match(result)) {
+                message.success('Login successful!');
+                router.push('/books');
+            }
+        } catch (err) {
+            message.error('Login failed');
+        }
     };
+
+    useEffect(() => {
+        return () => {
+            dispatch(clearError());
+        };
+    }, [dispatch]);
 
     return (
         <div className='min-h-screen flex items-center justify-center'>  
             <Card
-            className='w-full max-w-md shadow-2xl '
+            className='w-full max-w-md shadow-2xl'
             title={
                 <div className="text-center">
                     <h1 className="text-2xl font-bold text-gray-800">
@@ -37,6 +51,7 @@ export default function LoginPage() {
             }
             >
                 <Form
+                form={form}
                 className='self-center'
                 name="login"
                 layout="vertical"
@@ -66,10 +81,15 @@ export default function LoginPage() {
                 </Form.Item>
 
                 <Form.Item>
-                    <Button block type="primary" htmlType="submit">
+                    <Button 
+                        block type="primary" 
+                        htmlType="submit"
+                        loading={isLoading}
+                    >
                     Log in
                     </Button>
                 </Form.Item>
+                or <a href="/register">Register now!</a>
                 </Form>
             </Card>
         </div>

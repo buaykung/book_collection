@@ -1,5 +1,4 @@
-import { Column, Entity, Index, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Users } from "./Users";
+import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
 
 @Index("role_pk", ["id"], { unique: true })
 @Entity("role", { schema: "bookcollection" })
@@ -9,10 +8,6 @@ export class Role {
 
   @Column("integer", { name: "users_id" })
   usersId: number;
-
-  @OneToOne(() => Users, (user) => user.role, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "users_id" })
-  user: Users;
 
   @Column("character varying", { name: "name", nullable: true })
   name: string | null;
