@@ -1,7 +1,6 @@
 import { NextApiResponse } from 'next';
 import { verify } from 'jsonwebtoken';
 import { CustomNextApiRequest } from '../types/customRequest';
-// import { CustomNextApiRequest } from '@/types/customRequest';
 
 export interface AuthPayload {
   id: number

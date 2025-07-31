@@ -12,7 +12,7 @@ export class Users {
   @Column("character varying", { name: "username", unique: true, length: 100 })
   username: string;
 
-  @Column("character varying", { name: "password", unique: true, length: 255 })
+  @Column("character varying", { name: "password", length: 255 })
   password: string;
 
   @Column("timestamp with time zone", {
@@ -36,4 +36,10 @@ export class Users {
 
   @Column("character varying", { name: "name"})
   name: string;
+
+  @OneToMany(() => Book, (book) => book.user)
+  Book: Book[];
+
+  @OneToOne(() => Role, (role) => role.user)
+  role: Role | null;
 }

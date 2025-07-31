@@ -10,7 +10,7 @@ export class Book {
   @Column("integer", { name: "users_id" })
   usersId: number;
 
-  @ManyToOne(() => Users, (user) => user.books, { onDelete: "CASCADE" })
+  @ManyToOne(() => Users, (user) => user.Book, { onDelete: "CASCADE" })
   @JoinColumn({ name: "users_id" })
   user: Users;
 
