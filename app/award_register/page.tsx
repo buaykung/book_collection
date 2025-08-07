@@ -18,19 +18,19 @@ export default function AwardRegisterPage() {
     };
 
     const handleFileSelect = (file: File) => {
-    if (file.size > 10 * 1024 * 1024) {
-      message.error('ไฟล์ต้องมีขนาดไม่เกิน 10MB!')
-      return false
-    }
-    
-    if (file.type !== 'application/pdf') {
-      message.error('กรุณาเลือกไฟล์ PDF เท่านั้น!')
-      return false
-    }
+        if (file.size > 10 * 1024 * 1024) {
+        message.error('ไฟล์ต้องมีขนาดไม่เกิน 10MB!')
+        return false
+        }
+        
+        if (file.type !== 'application/pdf') {
+        message.error('กรุณาเลือกไฟล์ PDF เท่านั้น!')
+        return false
+        }
 
-    setSelectedFile(file)
-    return false // ป้องกันการ upload อัตโนมัติ
-  }
+        setSelectedFile(file)
+        return false // ป้องกันการ upload อัตโนมัติ
+    }
 
     const uploadProps = {
         accept: '.pdf',
@@ -40,9 +40,9 @@ export default function AwardRegisterPage() {
     }
 
     return(
-        <div className="h-screen flex font-['Athiti']">
+        <div className="h-screen flex">
             {/* Fixed Left Panel - Pink Background */}
-            <div className="w-1/2 bg-pink-400 p-8 text-white overflow-y-auto">
+            <div className="w-70 flex-auto bg-pink-400 p-8 text-white overflow-y-auto">
                 <div className="max-w-md">
                     <h1 className="text-2xl font-bold mb-6">
                         คุณสมบัติและเงื่อนไขการสมัครรับรางวัล
@@ -102,7 +102,7 @@ export default function AwardRegisterPage() {
             </div>
 
             {/* Scrollable Right Panel - Form */}
-            <div className="flex-1 bg-gray-50 overflow-y-auto">
+            <div className="w-30 flex-auto bg-gray-50 overflow-y-auto">
                 <div className="p-8">
                     <div className="max-w-lg mx-auto">
                         <h2 className="text-[30px] font-bold mb-2 text-right">
@@ -142,6 +142,7 @@ export default function AwardRegisterPage() {
 
                             {/* Radio buttons for categories */}
                             <Form.Item
+                                className='flex justify-center'
                                 name="category"
                                 rules={[{ required: true, message: 'กรุณาเลือกหมวดหมู่' }]}
                             >
@@ -154,76 +155,123 @@ export default function AwardRegisterPage() {
                                 </Radio.Group>
                             </Form.Item>
 
-                            <Form.Item label="รายงานผลการดำเนินงาน">
-                                <div className="flex items-center gap-4 mb-2">
-                                    <Radio.Group onChange={handleTypeChange} defaultValue="file" size="small">
+                            <Form.Item>
+                                <div className="flex gap-4 mb-2">
+                                    <span className='flex-1'>รายงานผลการดำเนินงาน</span>
+                                    <Radio.Group className='flex-1 text-end' onChange={handleTypeChange} defaultValue="file" size="small">
                                         <Radio value="file">แนบไฟล์</Radio>
                                         <Radio value="text">แนบลิ้งค์</Radio>
                                     </Radio.Group>
                                 </div>
-                                <div className='w-full border-2 border rounded-lg flex items-center bg-white'>
+                                <div className='w-full border-2 rounded-lg items-center bg-white'>
                                     {inputType === 'file' ? (
-                                        <Upload {...uploadProps}>
-                                            <div className="justify-between cursor-pointer transition-colors">
-                                                <span className="w-full rounded-l-lg bg-teal-100 p-3 flex items-center font-medium">เลือกไฟล์</span>
-                                                {selectedFile ? (
-                                                    <span className="text-gray-700">{selectedFile.name}</span>
-                                                ) : (
-                                                    <span className="text-gray-400">ไม่มีไฟล์ที่เลือก</span>
-                                                )}
+                                        <div className='grid grid-cols-7'>
+                                            <Upload {...uploadProps} className='col-span-1'>
+                                                <div className="cursor-pointer transition-colors">
+                                                    <span className="w-full rounded-l-lg bg-teal-100 p-2 flex items-center font-medium">เลือกไฟล์</span>
+                                                </div>
+                                            </Upload>
+
+                                            <div className="col-span-6 ml-1 flex items-center">
+                                                <span className={selectedFile ? 'text-gray-800' : 'text-gray-400'}>
+                                                {selectedFile ? selectedFile.name : 'ไฟล์ pdf ขนาดไม่เกิน 10mb'}
+                                                </span>
                                             </div>
-                                        </Upload>
+                                        </div>
                                         
                                     ) : (
                                         <Input
-                                            type={inputType === 'file' ? 'file' : 'text'}
-                                            placeholder={inputType === 'file' ? 'ไฟล์ pdf ขนากไม่เกิน 10 mb' : 'วางลิ้งค์ที่นี่'}
+                                            type={inputType}
+                                            placeholder='วางลิ้งค์ที่นี่'
                                             size="large"
                                             className="rounded-none border-2 border-gray-300"
                                         />
                                     )}
                                 </div>
-
-                                
                             </Form.Item>
 
-                            <Form.Item label="หนังสือนำส่ง">
-                                <div className="flex items-center gap-4 mb-2">
-                                    <Radio.Group defaultValue="file" size="small">
+                            <Form.Item>
+                                <div className="flex gap-4 mb-2">
+                                    <span className='flex-1'>หนังสือนำส่ง</span>
+                                    <Radio.Group className='flex-1 text-end' onChange={handleTypeChange} defaultValue="file" size="small">
                                         <Radio value="file">แนบไฟล์</Radio>
                                         <Radio value="text">แนบลิ้งค์</Radio>
                                     </Radio.Group>
                                 </div>
-                                <Input
-                                    placeholder="ชื่อ-นามสกุล ระดับชั้น โรงเรียน"
-                                    size="large"
-                                    className="rounded-none border-2 border-gray-300"
-                                />
+                                <div className='w-full border-2 rounded-lg items-center bg-white'>
+                                    {inputType === 'file' ? (
+                                        <div className='grid grid-cols-7'>
+                                            <Upload {...uploadProps} className='col-span-1'>
+                                                <div className="cursor-pointer transition-colors">
+                                                    <span className="w-full rounded-l-lg bg-teal-100 p-2 flex items-center font-medium">เลือกไฟล์</span>
+                                                </div>
+                                            </Upload>
+
+                                            <div className="col-span-6 ml-1 flex items-center">
+                                                <span className={selectedFile ? 'text-gray-800' : 'text-gray-400'}>
+                                                {selectedFile ? selectedFile.name : 'ไฟล์ pdf ขนาดไม่เกิน 10mb'}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        
+                                    ) : (
+                                        <Input
+                                            type={inputType}
+                                            placeholder='วางลิ้งค์ที่นี่'
+                                            size="large"
+                                            className="rounded-none border-2 border-gray-300"
+                                        />
+                                    )}
+                                </div>
                             </Form.Item>
 
                             {/* ผู้ประสานงาน */}
                             <Form.Item label="ผู้ประสานงาน">
-                                <div className="border-2 border-dashed border-gray-400 p-4 space-y-3">
-                                    <div>
-                                        <label className="block text-sm mb-1">ชื่อ - นามสกุล</label>
-                                        <Input
-                                            placeholder="ชื่อ-นามสกุล"
-                                            className="rounded-none"
-                                        />
+                                <div className='border-2 rounded-lg p-2 space-y-3'>
+                                    <div className="border-2 border-dashed rounded-md p-2 space-y-3">
+                                        <div>
+                                            <label className="block text-sm mb-1">ชื่อ - นามสกุล</label>
+                                            <Input
+                                                placeholder="ชื่อ-นามสกุล"
+                                                className="rounded-none border-2"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm mb-1">ตำแหน่ง</label>
+                                            <Input
+                                                placeholder="ตำแหน่ง"
+                                                className="rounded-none border-2"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm mb-1">โทรศัพท์</label>
+                                            <Input
+                                                placeholder="โทรศัพท์"
+                                                className="rounded-none border-2"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm mb-1">มือถือ</label>
+                                            <Input
+                                                placeholder="มือถือ"
+                                                className="rounded-none border-2"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm mb-1">อีเมล</label>
+                                            <Input
+                                                placeholder="อีเมล"
+                                                className="rounded-none border-2"
+                                            />
+                                        </div>
                                     </div>
-                                    <div>
-                                        <label className="block text-sm mb-1">ตำแหน่ง</label>
-                                        <Input
-                                            placeholder="ตำแหน่ง"
-                                            className="rounded-none"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm mb-1">เบอร์โทร</label>
-                                        <Input
-                                            placeholder="เบอร์โทร"
-                                            className="rounded-none"
-                                        />
+                                    <div className='flex justify-center'>
+                                        <Button
+                                            className='border-2 border-black'
+                                            shape="round"
+                                        >
+                                            <span className="text-sm mr-32 ml-32">เพิ่มผู้ประสานงาน</span>
+                                        </Button>
                                     </div>
                                 </div>
                             </Form.Item>
