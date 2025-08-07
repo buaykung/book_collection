@@ -61,7 +61,7 @@ export async function POST(req: Request) {
                 role: newRole.role 
             },
             process.env.JWT_SECRET!,
-            { expiresIn: 60 }
+            { expiresIn: "60m" }
         );
 
         const { password, ...userWithoutPassword } = savedUser;

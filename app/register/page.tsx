@@ -40,9 +40,9 @@ export default function RegisterPage() {
     }, [dispatch]);
 
     return (
-         <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4">
+         <div className="min-h-screen flex items-center justify-center py-12 px-4">
             <Card 
-                title="Create Account" 
+                title="สมัครใช้งาน" 
                 className="w-full max-w-md shadow-lg"
                 styles={{
                     header: {
